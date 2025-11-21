@@ -74,6 +74,7 @@ environment_variables:
 These options are used in `config.yaml`:
 
 | Option | Type | Description |
+|--------|------|-------------|
 | runtime | string | Runtime environment (e.g., `python310`, `nodejs18`). Default: `python310`. |
 | entry_point | string | Name of the function to execute. Default: `main`. |
 | is_public | bool | If `true`, allows unauthenticated access. Default: `false`. |
