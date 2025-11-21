@@ -1,1 +1,5 @@
 *.DS_Store*
+.terraform*
+*.auto.tfvars
+*terraform.tfstate
+*.zip

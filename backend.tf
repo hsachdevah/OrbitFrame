@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
-    bucket = "my-terraform-state-bucket"
-    prefix = "cloud-functions"
+    bucket = "project-id-tf-state-bucket"
+    prefix = "orbitframe"
   }
   required_providers {
     google = {

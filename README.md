@@ -28,6 +28,23 @@ This repository contains a modular, configuration-driven framework for deploying
         └── src/
 ```
 
+## Setup Environment
+
+```
+gcloud auth login
+gcloud auth application-default login
+```
+
+```
+gcloud config set project <project-id>
+gcloud storage buckets create gs://stocktrackr-26o24-tf-state-bucket --location=europe-west3
+```
+
+Update the `bucket` value in `backend.tf` & then perform
+```
+terraform init
+```
+
 ## How to Add a New Function
 
 1.  Create a new directory in `functions/` (e.g., `functions/my-new-func`).
