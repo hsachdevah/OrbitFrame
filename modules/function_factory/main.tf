@@ -50,8 +50,8 @@ resource "google_cloudfunctions2_function" "function" {
       for_each = var.secret_env_vars
       content {
         key        = secret_environment_variables.key
-        project_id = var.project_id
-        secret     = can(regex("^projects/", secret_environment_variables.value.secret_id)) ? secret_environment_variables.value.secret_id : "projects/${var.project_id}/secrets/${secret_environment_variables.value.secret_id}"
+        project_id = can(regex("^projects/", secret_environment_variables.value.secret_id)) ? regex("^projects/([^/]+)/secrets/.*$", secret_environment_variables.value.secret_id)[0] : var.project_id
+        secret     = can(regex("^projects/", secret_environment_variables.value.secret_id)) ? regex("^projects/[^/]+/secrets/([^/]+)$", secret_environment_variables.value.secret_id)[0] : secret_environment_variables.value.secret_id
         version    = secret_environment_variables.value.version
       }
     }
