@@ -1,0 +1,5 @@
+runtime: python310
+entry_point: hello_http
+is_public: true
+environment_variables:
+  LOG_LEVEL: INFO
