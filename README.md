@@ -2,7 +2,7 @@
 
 This repository contains a modular, configuration-driven framework for deploying Google Cloud Functions (Gen 2) using Terraform. It simplifies the management of multiple functions, supporting features like:
 
-*   **Configuration-driven:** Define all functions in `terraform.tfvars`.
+*   **Configuration-driven:** Define functions in individual `config.yaml` files.
 *   **Source Code Management:** Automatically zips and uploads source code from a local directory.
 *   **Security:** Per-function Service Accounts, fine-grained IAM permissions, and Secret Manager integration.
 *   **Scheduling:** Optional Cloud Scheduler integration for recurring jobs.
@@ -15,52 +15,48 @@ This repository contains a modular, configuration-driven framework for deploying
 .
 ├── main.tf                  # Root Terraform logic (calls the module)
 ├── variables.tf             # Input definitions
-├── terraform.tfvars         # Configuration file (Define your functions here)
+├── terraform.tfvars         # Global project configuration
 ├── backend.tf               # State management configuration
 ├── modules/
 │   └── function_factory/    # The reusable module logic
-└── src/                     # Source code for your functions
+└── functions/               # Directory containing all functions
     ├── function-a/
+    │   ├── config.yaml      # Function configuration
+    │   └── src/             # Source code (main.py, requirements.txt)
     └── function-b/
+        ├── config.yaml
+        └── src/
 ```
 
 ## How to Add a New Function
 
-1.  Create a new directory in `src/` (e.g., `src/my-new-func`) and add your code (`main.py`, `requirements.txt`, etc.).
-2.  Open `terraform.tfvars`.
-3.  Add a new entry to the `cloud_functions` map:
+1.  Create a new directory in `functions/` (e.g., `functions/my-new-func`).
+2.  Inside that directory, create a `src/` folder and add your code (`main.py`, `requirements.txt`, etc.).
+3.  Inside `functions/my-new-func`, create a `config.yaml` file:
 
-```hcl
-cloud_functions = {
-  # ... existing functions ...
+```yaml
+runtime: python310
+entry_point: main
 
-  "my-new-func" = {
-    source_dir  = "./src/my-new-func"
-    runtime     = "python310"
-    entry_point = "main"
-    
-    # Optional: Make it public
-    is_public   = true
+# Optional: Make it public
+is_public: true
 
-    # Optional: Schedule it
-    schedule_config = {
-      cron = "0 9 * * *" # Daily at 9 AM
-    }
+# Optional: Schedule it
+schedule_config:
+  cron: "0 9 * * *" # Daily at 9 AM
 
-    # Optional: Environment Variables
-    environment_variables = {
-      ENV = "production"
-    }
-  }
-}
+# Optional: Environment Variables
+environment_variables:
+  ENV: production
 ```
 
 4.  Run `terraform apply`.
 
 ## Configuration Options
 
+These options are used in `config.yaml`:
+
 | Option | Type | Description |
-| source_dir | string | Path to the function source code. |
 | runtime | string | Runtime environment (e.g., `python310`, `nodejs18`). Default: `python310`. |
 | entry_point | string | Name of the function to execute. Default: `main`. |
 | is_public | bool | If `true`, allows unauthenticated access. Default: `false`. |
