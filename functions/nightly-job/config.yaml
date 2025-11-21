@@ -1,0 +1,11 @@
+runtime: python310
+entry_point: hello_scheduled
+is_public: false
+schedule_config:
+  cron: "0 2 * * *"
+bucket_permissions:
+  my-data-lake: roles/storage.objectViewer
+secret_env_vars:
+  API_KEY:
+    secret_id: projects/my-project/secrets/api-key
+    version: "1"
