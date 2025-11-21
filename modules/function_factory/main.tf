@@ -51,7 +51,7 @@ resource "google_cloudfunctions2_function" "function" {
       content {
         key        = secret_environment_variables.key
         project_id = var.project_id
-        secret     = secret_environment_variables.value.secret_id
+        secret     = can(regex("^projects/", secret_environment_variables.value.secret_id)) ? secret_environment_variables.value.secret_id : "projects/${var.project_id}/secrets/${secret_environment_variables.value.secret_id}"
         version    = secret_environment_variables.value.version
       }
     }
