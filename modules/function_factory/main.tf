@@ -124,3 +124,13 @@ resource "google_cloud_run_service_iam_member" "public_invoker" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
+# Scheduler Invoker Permission
+resource "google_cloud_run_service_iam_member" "scheduler_invoker" {
+  count    = var.schedule_config != null ? 1 : 0
+  location = google_cloudfunctions2_function.function.location
+  service  = google_cloudfunctions2_function.function.name
+  project  = var.project_id
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.function_sa.email}"
+}
